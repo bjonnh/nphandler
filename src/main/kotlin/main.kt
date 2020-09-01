@@ -7,4 +7,4 @@ fun main() {
         val gr = npDataset.filterGraph(from=npDataset.methods["JIN_M_0003"], to=npDataset.fractions["JIN_0084"]).toDOTGraph()
         it.write(gr)
     }
-}
+}g
