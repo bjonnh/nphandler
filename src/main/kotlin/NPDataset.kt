@@ -118,7 +118,7 @@ data class NPDataset(
     }
 
     fun SchemeGraph.filterGraph(vertex: Thing, directionIsFrom: Boolean): SchemeGraph {
-        val newGraph: Graph<Thing, MyEdge> = DefaultDirectedGraph(MyEdge::class.java)
+        val newGraph: SchemeGraph = DefaultDirectedGraph(MyEdge::class.java)
 
         val toConsider = mutableSetOf<Thing>()
         val edges = this.edgeSet().toMutableSet()
@@ -142,31 +142,21 @@ data class NPDataset(
                     newGraph.addVertex(edge.from)
                     newGraph.addVertex(edge.to)
                     newGraph.addEdge(edge.from, edge.to)
-
-                    if (directionIsFrom) {
-                        toConsider.add(edge.to)
-                    } else {
-                        toConsider.add(edge.from)
-                    }
-
                     deleteEdges.add(edge)
                     didSomething = true
-                }
-
-                if (vertexToConsider in toConsider) {
+                    toConsider.add(otherSideVertexToConsider)
+                } else if (vertexToConsider in toConsider) {
                     newGraph.addVertex(edge.from)
                     newGraph.addVertex(edge.to)
                     newGraph.addEdge(edge.from, edge.to)
                     deleteEdges.add(edge)
                     didSomething = true
-
                     toConsider.add(otherSideVertexToConsider)
                 }
             }
             deleteEdges.forEach { edges.remove(it) }
             if (!didSomething) edges.clear()  // We have not done anything this cycle, so there will be nothing next time either
         }
-
         return newGraph
     }
 
