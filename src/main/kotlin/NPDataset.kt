@@ -132,6 +132,12 @@ data class NPDataset(
                     edge.to
                 }
 
+                val otherSideVertexToConsider = if (directionIsFrom) {
+                    edge.to
+                } else {
+                    edge.from
+                }
+
                 if (vertexToConsider == vertex) {
                     newGraph.addVertex(edge.from)
                     newGraph.addVertex(edge.to)
@@ -147,19 +153,14 @@ data class NPDataset(
                     didSomething = true
                 }
 
-
-
                 if (vertexToConsider in toConsider) {
                     newGraph.addVertex(edge.from)
                     newGraph.addVertex(edge.to)
                     newGraph.addEdge(edge.from, edge.to)
                     deleteEdges.add(edge)
                     didSomething = true
-                    if (directionIsFrom) {
-                        toConsider.add(edge.to)
-                    } else {
-                        toConsider.add(edge.from)
-                    }
+
+                    toConsider.add(otherSideVertexToConsider)
                 }
             }
             deleteEdges.forEach { edges.remove(it) }
@@ -169,6 +170,10 @@ data class NPDataset(
         return newGraph
     }
 
+    /**
+     * Filter the graph between/to those two nodes. There is likely a way to make that in a single pass
+     * But our graphs are small so that should work for now
+     */
     fun filterGraph(from: Thing?, to: Thing?): SchemeGraph {
         return toGraph().let {
             if (from != null) {
