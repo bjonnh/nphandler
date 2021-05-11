@@ -1,4 +1,4 @@
-package models
+package net.nprod.nphandler.models
 
 data class Method(
     override val prefix: String,

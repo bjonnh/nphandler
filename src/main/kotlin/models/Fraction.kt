@@ -1,5 +1,4 @@
-package models
-
+package net.nprod.nphandler.models
 
 data class Fraction (
     override val prefix: String,

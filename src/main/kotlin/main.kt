@@ -1,10 +1,23 @@
-import java.io.File
+package net.nprod.nphandler
 
-fun main() {
-    val npDataset = NPDataset.fromSpreadSheet("/home/bjo/Documents/0-Chicago/Current/ITR/FracSchemes/2020-08-31_Jin.ods")
+import kotlinx.cli.ArgParser
+import kotlinx.cli.ArgType
+import kotlinx.cli.required
+import net.nprod.nphandler.graph.export.toDOTGraph
+import net.nprod.nphandler.helpers.toFile
+import net.nprod.nphandler.models.import.npDatasetFromSpreadSheet
 
-    File("/tmp/test.dot").bufferedWriter().use {
-        val gr = npDataset.filterGraph(from=npDataset.methods["JIN_M_0003"], to=npDataset.fractions["JIN_0084"]).toDOTGraph()
-        it.write(gr)
-    }
+fun main(args: Array<String>) {
+    val parser = ArgParser("example")
+    val input by parser.option(ArgType.String, shortName = "i", description = "Input file").required()
+    val output by parser.option(ArgType.String, shortName = "o", description = "Output file name").required()
+    parser.parse(args)
+
+    val npDataset = npDatasetFromSpreadSheet(input)
+
+    val gr = npDataset
+        //.filterGraph(from=npDataset.methods["JIN_M_0003"], to=npDataset.fractions["JIN_0084"])
+        .toGraph()
+        .toDOTGraph()
+        .toFile(output)
 }

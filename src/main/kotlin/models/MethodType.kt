@@ -1,4 +1,4 @@
-package models
+package net.nprod.nphandler.models
 
 enum class MethodType(val text: String) {
     Combine("combine"),
