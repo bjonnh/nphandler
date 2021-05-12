@@ -12,7 +12,7 @@ You need a JVM installed.
 
 ## Conversion
 
-You can then export the generated .dot using one of the folowing:
+You can then convert the generated .dot using one of the folowing:
 
 ```
 dot -Tsvg output/output.dot -o output/output.svg
